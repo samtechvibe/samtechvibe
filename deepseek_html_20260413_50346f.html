@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Sam Tech Vibe | Premium Web & App Development</title>
+  <!-- Google Fonts + Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <!-- Font Awesome 6 (free CDN) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Swiper JS (for testimonials slider) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #05070a;
+      color: #eef5ff;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    /* custom scroll */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0a0f1a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #00c6ff, #a855f7);
+      border-radius: 10px;
+    }
+
+    /* glassmorphism base */
+    .glass {
+      background: rgba(15, 25, 35, 0.5);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 198, 255, 0.2);
+      border-radius: 28px;
+    }
+
+    /* loading screen */
+    #preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #03050a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.6s ease, visibility 0.6s;
+    }
+    .loader-logo {
+      font-size: 2.8rem;
+      font-weight: 800;
+      background: linear-gradient(125deg, #00c6ff, #b624ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: pulseGlow 1.4s infinite alternate;
+    }
+    @keyframes pulseGlow {
+      0% { opacity: 0.6; text-shadow: 0 0 5px #00c6ff; }
+      100% { opacity: 1; text-shadow: 0 0 20px #a855f7; }
+    }
+
+    /* navbar sticky */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(3, 7, 15, 0.75);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(0, 198, 255, 0.2);
+      transition: all 0.3s;
+    }
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff, #00c6ff, #b624ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.5px;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: #eef5ff;
+      font-weight: 500;
+      transition: 0.2s;
+      font-size: 1rem;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      color: #00c6ff;
+      text-shadow: 0 0 5px #00c6ff;
+    }
+    .mobile-menu {
+      display: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+    }
+    @media (max-width: 880px) {
+      .nav-links {
+        position: fixed;
+        top: 70px;
+        left: -100%;
+        width: 70%;
+        height: 100vh;
+        background: rgba(5, 10, 18, 0.95);
+        backdrop-filter: blur(20px);
+        flex-direction: column;
+        padding: 2rem;
+        transition: 0.3s;
+        border-right: 1px solid #00c6ff30;
+        gap: 2rem;
+      }
+      .nav-links.open {
+        left: 0;
+      }
+      .mobile-menu {
+        display: block;
+      }
+    }
+
+    /* buttons */
+    .btn-primary {
+      background: linear-gradient(95deg, #00c6ff, #a855f7);
+      border: none;
+      padding: 0.9rem 2rem;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 1rem;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 15px rgba(0, 198, 255, 0.3);
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(168, 85, 247, 0.5);
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid #00c6ff;
+      padding: 0.8rem 1.8rem;
+      border-radius: 40px;
+      font-weight: 500;
+      color: #00c6ff;
+      transition: 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-outline:hover {
+      background: rgba(0,198,255,0.1);
+      border-color: #a855f7;
+    }
+
+    section {
+      padding: 6rem 5%;
+    }
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      background: linear-gradient(125deg, #fff, #00c6ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: inline-block;
+    }
+
+    /* hero particles canvas */
+    #particle-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .hero {
+      position: relative;
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+    .hero-content {
+      flex: 1;
+      z-index: 2;
+    }
+    .hero-badge {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .trust-badge {
+      background: rgba(255,255,255,0.05);
+      border-radius: 40px;
+      padding: 0.4rem 1rem;
+      font-size: 0.8rem;
+      backdrop-filter: blur(4px);
+    }
+
+    /* services grid */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+    .service-card {
+      background: rgba(20, 30, 45, 0.45);
+      backdrop-filter: blur(12px);
+      border-radius: 32px;
+      padding: 2rem 1.5rem;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0,198,255,0.2);
+      text-align: center;
+    }
+    .service-card:hover {
+      transform: translateY(-8px);
+      border-color: #a855f7;
+      box-shadow: 0 15px 35px rgba(168,85,247,0.2);
+    }
+    .service-icon {
+      font-size: 3rem;
+      margin-bottom: 1.2rem;
+      color: #00c6ff;
+    }
+
+    /* portfolio cards */
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+    .port-card {
+      background: rgba(12, 20, 30, 0.6);
+      border-radius: 28px;
+      overflow: hidden;
+      backdrop-filter: blur(8px);
+      transition: 0.3s;
+      border: 1px solid rgba(0,198,255,0.2);
+    }
+    .port-card:hover {
+      transform: scale(1.02);
+      border-color: #a855f7;
+    }
+    .port-img {
+      height: 200px;
+      background: linear-gradient(145deg, #1f2a3e, #0b0f1a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+    }
+    .port-info {
+      padding: 1.5rem;
+    }
+
+    /* why choose us */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .feature {
+      text-align: center;
+      padding: 1.5rem;
+      background: rgba(255,255,255,0.02);
+      border-radius: 28px;
+    }
+
+    /* counters */
+    .counter-row {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+    .counter-item {
+      text-align: center;
+    }
+    .counter-num {
+      font-size: 3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg,#fff,#00c6ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    /* testimonials slider */
+    .testimonial-slider {
+      background: rgba(0,0,0,0.3);
+      border-radius: 32px;
+      padding: 2rem;
+    }
+    .testimonial-card {
+      background: rgba(20, 30, 45, 0.6);
+      backdrop-filter: blur(8px);
+      border-radius: 28px;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    /* contact section - Google Form Button */
+    .contact-grid {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      align-items: stretch;
+      justify-content: center;
+    }
+    .contact-card {
+      flex: 1;
+      background: rgba(20, 28, 40, 0.4);
+      backdrop-filter: blur(12px);
+      border-radius: 32px;
+      padding: 2.5rem;
+      text-align: center;
+      border: 1px solid rgba(0,198,255,0.2);
+      transition: 0.3s;
+    }
+    .contact-card:hover {
+      border-color: #a855f7;
+      box-shadow: 0 15px 35px rgba(168,85,247,0.2);
+    }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid rgba(0,198,255,0.2);
+    }
+    @media (max-width: 760px) {
+      .section-title { font-size: 2rem; }
+      .contact-card { flex: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div id="preloader">
+    <div class="loader-logo">SAM TECH VIBE</div>
+  </div>
+
+  <!-- Sticky Navbar -->
+  <nav class="navbar">
+    <div class="logo">SAM TECH VIBE</div>
+    <div class="mobile-menu" id="mobileMenuBtn"><i class="fas fa-bars"></i></div>
+    <div class="nav-links" id="navLinks">
+      <a href="#home" class="nav-link active">Home</a>
+      <a href="#services" class="nav-link">Services</a>
+      <a href="#portfolio" class="nav-link">Portfolio</a>
+      <a href="#about" class="nav-link">About</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section with Canvas background -->
+  <section id="home" class="hero" style="position:relative; overflow:hidden;">
+    <canvas id="particle-canvas"></canvas>
+    <div class="hero-content">
+      <h1 style="font-size: 3.2rem; font-weight: 800; line-height: 1.2;">We Create Powerful Websites & Apps That Grow Your Business 🚀</h1>
+      <p style="font-size: 1.3rem; margin: 1.5rem 0; color: #ccddee;">Premium Digital Solutions for Modern Brands</p>
+      <!-- Google Form Button in Hero with correct link -->
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLScJyvlMP6fq7sCYfBCLCIdmquCZiV75hJXMLjRccUH5jx1Xxg/viewform?usp=publish-editor" target="_blank" class="btn-primary">
+        Start Your Project 🚀
+      </a>
+      <div class="hero-badge">
+        <span class="trust-badge"><i class="fas fa-check-circle"></i> 150+ Projects Delivered</span>
+        <span class="trust-badge"><i class="fas fa-star"></i> 98% Client Satisfaction</span>
+        <span class="trust-badge"><i class="fas fa-trophy"></i> Trusted by 70+ Brands</span>
+      </div>
+      <div class="counter-row" style="margin-top: 2rem; justify-content: flex-start;">
+        <div class="counter-item"><div class="counter-num" data-target="187">0</div><p>Happy Clients</p></div>
+        <div class="counter-item"><div class="counter-num" data-target="245">0</div><p>Projects Done</p></div>
+        <div class="counter-item"><div class="counter-num" data-target="12">0</div><p>Years Experience</p></div>
+      </div>
+    </div>
+    <div style="flex:0.8; min-width: 250px;"></div>
+  </section>
+
+  <!-- Services Section -->
+  <section id="services">
+    <h2 class="section-title">Premium Services</h2>
+    <div class="services-grid">
+      <div class="service-card"><div class="service-icon"><i class="fas fa-code"></i></div><h3>Website Development</h3><p>High-performance, responsive websites that convert visitors into loyal customers.</p></div>
+      <div class="service-card"><div class="service-icon"><i class="fas fa-mobile-alt"></i></div><h3>App Development</h3><p>Native & cross-platform mobile apps with stunning UI and smooth performance.</p></div>
+      <div class="service-card"><div class="service-icon"><i class="fas fa-paintbrush"></i></div><h3>UI/UX Design</h3><p>Intuitive, modern interfaces that elevate brand perception and usability.</p></div>
+      <div class="service-card"><div class="service-icon"><i class="fas fa-robot"></i></div><h3>Automation Solutions</h3><p>Workflow automation & AI integrations to boost your operational efficiency.</p></div>
+    </div>
+    <div style="text-align:center; margin-top: 3rem;"><span class="trust-badge"><i class="fas fa-gem"></i> Starting from ₹9,999</span> <span class="trust-badge"><i class="fas fa-hourglass-half"></i> Limited slots available</span></div>
+  </section>
+
+  <!-- Portfolio Section -->
+  <section id="portfolio">
+    <h2 class="section-title">Our Creative Portfolio</h2>
+    <div class="portfolio-grid">
+      <div class="port-card"><div class="port-img"><i class="fas fa-globe" style="font-size:3rem; color:#00c6ff;"></i></div><div class="port-info"><h3>Fintech Dashboard</h3><p>Modern banking web app with real-time analytics.</p></div></div>
+      <div class="port-card"><div class="port-img"><i class="fas fa-shopping-cart" style="font-size:3rem; color:#a855f7;"></i></div><div class="port-info"><h3>Luxury E‑commerce</h3><p>High-end fashion store with seamless checkout.</p></div></div>
+      <div class="port-card"><div class="port-img"><i class="fas fa-chalkboard-user" style="font-size:3rem; color:#00c6ff;"></i></div><div class="port-info"><h3>Health & Fitness App</h3><p>Cross-platform mobile app with 5k+ downloads.</p></div></div>
+    </div>
+  </section>
+
+  <!-- Why Choose Us -->
+  <section>
+    <h2 class="section-title">Why Choose Us</h2>
+    <div class="features-grid">
+      <div class="feature"><i class="fas fa-bolt" style="font-size:2.5rem; color:#00c6ff;"></i><h3>Fast Delivery ⚡</h3><p>Agile sprints, on-time results</p></div>
+      <div class="feature"><i class="fas fa-gem" style="font-size:2.5rem; color:#a855f7;"></i><h3>Premium Design 💎</h3><p>Pixel-perfect & award-winning aesthetics</p></div>
+      <div class="feature"><i class="fas fa-chart-line" style="font-size:2.5rem; color:#00c6ff;"></i><h3>Business Growth Focus 📈</h3><p>Solutions tailored to scale revenue</p></div>
+      <div class="feature"><i class="fas fa-headset" style="font-size:2.5rem; color:#a855f7;"></i><h3>24/7 Support 🤝</h3><p>Dedicated support & maintenance</p></div>
+    </div>
+  </section>
+
+  <!-- Testimonials Slider -->
+  <section>
+    <h2 class="section-title">Client Love</h2>
+    <div class="swiper testimonial-slider">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide"><div class="testimonial-card"><i class="fas fa-quote-left" style="font-size:2rem; opacity:0.6;"></i><p style="margin:1rem 0">"Sam Tech Vibe built our e‑commerce platform and sales skyrocketed 200%! Premium quality."</p><h4>— Riya Sharma, Founder of LuxCart</h4></div></div>
+        <div class="swiper-slide"><div class="testimonial-card"><i class="fas fa-quote-left" style="font-size:2rem; opacity:0.6;"></i><p style="margin:1rem 0">"The team's modern design sense & development speed are unmatched. Highly recommend!"</p><h4>— Arjun Mehta, CTO StellarAI</h4></div></div>
+        <div class="swiper-slide"><div class="testimonial-card"><i class="fas fa-quote-left" style="font-size:2rem; opacity:0.6;"></i><p style="margin:1rem 0">"Best investment we made for our brand. The app looks and feels like a global product."</p><h4>— Neha Kapoor, GrowthHead</h4></div></div>
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </section>
+
+  <!-- About (founder story) -->
+  <section id="about">
+    <h2 class="section-title">About Sam Tech Vibe</h2>
+    <div style="display: flex; gap: 2rem; flex-wrap: wrap; align-items:center;">
+      <div style="flex:1; min-width:200px;"><i class="fas fa-user-astronaut" style="font-size: 5rem; color:#00c6ff;"></i></div>
+      <div style="flex:2"><p style="font-size:1.1rem; line-height:1.5">Founded by Sam, a passionate technologist & creative visionary, Sam Tech Vibe merges futuristic design with robust engineering. We believe every brand deserves a digital identity that feels premium, performs flawlessly, and drives measurable business growth. Our mission: deliver luxury-level tech solutions with zero compromise.</p><br/><p><strong>💎 150+ projects, 💬 100% transparency, 🚀 Global mindset.</strong></p></div>
+    </div>
+  </section>
+
+  <!-- Contact Section - Google Form Button -->
+  <section id="contact">
+    <h2 class="section-title">Let's Build Your Dream Project</h2>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <i class="fas fa-google" style="font-size: 3rem; color: #00c6ff; margin-bottom: 1rem; display: inline-block;"></i>
+        <h3 style="margin-bottom: 1rem;">Fill Out Our Quick Form</h3>
+        <p style="margin-bottom: 1.5rem;">Share your project details and we'll get back to you within 24 hours.</p>
+        <!-- Google Form Button in Contact Section with correct link -->
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLScJyvlMP6fq7sCYfBCLCIdmquCZiV75hJXMLjRccUH5jx1Xxg/viewform?usp=publish-editor" target="_blank" class="btn-primary">
+          Start Your Project 🚀
+        </a>
+        <div class="trust-badge" style="margin-top: 2rem; display: inline-block;">🚀 Limited slots this month — secure your spot!</div>
+      </div>
+      <div class="contact-card">
+        <i class="fas fa-envelope-open-text" style="font-size: 3rem; color: #a855f7; margin-bottom: 1rem; display: inline-block;"></i>
+        <h3 style="margin-bottom: 1rem;">Direct Email</h3>
+        <p style="margin-bottom: 0.5rem;">Prefer to reach out directly?</p>
+        <p style="font-size: 1.2rem; font-weight: 600; word-break: break-all; background: rgba(0,198,255,0.1); padding: 0.8rem; border-radius: 28px;">
+          info.samtechvibe@gmail.com
+        </p>
+        <p style="margin-top: 1rem;"><i class="fas fa-clock"></i> Response within 24 hours</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2025 Sam Tech Vibe — Futuristic Digital Agency | All rights reserved</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    // preloader
+    window.addEventListener('load', () => {
+      const preloader = document.getElementById('preloader');
+      setTimeout(() => {
+        preloader.style.opacity = '0';
+        preloader.style.visibility = 'hidden';
+      }, 800);
+    });
+
+    // particle animation
+    const canvas = document.getElementById('particle-canvas');
+    if(canvas) {
+      let ctx = canvas.getContext('2d');
+      let width, height;
+      let particles = [];
+      function resizeCanvas() {
+        width = canvas.parentElement.clientWidth;
+        height = canvas.parentElement.clientHeight;
+        canvas.width = width;
+        canvas.height = height;
+      }
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+      class Particle {
+        constructor() {
+          this.x = Math.random() * width;
+          this.y = Math.random() * height;
+          this.size = Math.random() * 2 + 0.8;
+          this.speedX = (Math.random() - 0.5) * 0.6;
+          this.speedY = (Math.random() - 0.5) * 0.4;
+          this.color = `rgba(0, 198, 255, ${Math.random() * 0.4 + 0.2})`;
+        }
+        update() {
+          this.x += this.speedX;
+          this.y += this.speedY;
+          if(this.x < 0) this.x = width;
+          if(this.x > width) this.x = 0;
+          if(this.y < 0) this.y = height;
+          if(this.y > height) this.y = 0;
+        }
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fillStyle = this.color;
+          ctx.fill();
+        }
+      }
+      function initParticles(count=80) {
+        for(let i=0;i<count;i++) particles.push(new Particle());
+      }
+      function animateParticles() {
+        if(!ctx) return;
+        ctx.clearRect(0, 0, width, height);
+        for(let p of particles) {
+          p.update();
+          p.draw();
+        }
+        requestAnimationFrame(animateParticles);
+      }
+      if(width && height) {
+        initParticles(70);
+        animateParticles();
+      }
+    }
+
+    // animated counters
+    const counters = document.querySelectorAll('.counter-num');
+    const observerOptions = { threshold: 0.4, rootMargin: "0px" };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.getAttribute('data-target'));
+          let count = 0;
+          const updateCounter = () => {
+            const increment = target / 45;
+            if(count < target) {
+              count += Math.ceil(increment);
+              if(count > target) count = target;
+              el.innerText = count;
+              setTimeout(updateCounter, 20);
+            } else {
+              el.innerText = target;
+            }
+          };
+          updateCounter();
+          observer.unobserve(el);
+        }
+      });
+    }, observerOptions);
+    counters.forEach(counter => observer.observe(counter));
+
+    // Swiper testimonial
+    new Swiper('.testimonial-slider', {
+      loop: true,
+      autoplay: { delay: 4000, disableOnInteraction: false },
+      pagination: { el: '.swiper-pagination', clickable: true },
+      slidesPerView: 1,
+      breakpoints: { 768: { slidesPerView: 2, spaceBetween: 20 } }
+    });
+
+    // Navbar mobile toggle & smooth scroll
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const navLinksDiv = document.getElementById('navLinks');
+    mobileBtn?.addEventListener('click', () => navLinksDiv.classList.toggle('open'));
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        navLinksDiv.classList.remove('open');
+        const targetId = link.getAttribute('href').substring(1);
+        const targetEl = document.getElementById(targetId);
+        if(targetEl) targetEl.scrollIntoView({ behavior: 'smooth' });
+        e.preventDefault();
+      });
+    });
+
+    // Scroll animations for glass cards
+    const fadeElements = document.querySelectorAll('.service-card, .port-card, .feature, .testimonial-card, .contact-card');
+    const fadeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) entry.target.style.opacity = '1';
+        else entry.target.style.opacity = '0';
+      });
+    }, { threshold: 0.2 });
+    fadeElements.forEach(el => { el.style.transition = 'opacity 0.6s ease, transform 0.3s'; el.style.opacity = '0'; fadeObserver.observe(el); });
+    
+    // active nav highlight
+    window.addEventListener('scroll', () => {
+      let fromTop = window.scrollY + 100;
+      document.querySelectorAll('section').forEach(sec => {
+        let id = sec.getAttribute('id');
+        if(id && fromTop >= sec.offsetTop && fromTop < sec.offsetTop + sec.offsetHeight) {
+          document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.remove('active');
+            if(link.getAttribute('href') === '#'+id) link.classList.add('active');
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
